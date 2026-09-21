@@ -27,8 +27,14 @@ jobs:
             echo "::error::ROADMAP_AMA_SYNC_TOKEN secret is not configured."
             exit 1
           fi
-          gh api repos/Lantern-Product/roadmap-ama/dispatches \
-            -f event_type=sync-folme \
-            -f "client_payload[source_sha=${GITHUB_SHA}]" \
-            -f "client_payload[source_ref=${GITHUB_REF_NAME}]"
-          echo "Dispatched sync-folme to roadmap-ama (${GITHUB_SHA:0:7})."
+          # #region agent log
+          echo "dispatch_start sha=${GITHUB_SHA:0:7} ref=${GITHUB_REF_NAME}"
+          # #endregion
+          payload=$(jq -nc \
+            --arg sha "$GITHUB_SHA" \
+            --arg ref "$GITHUB_REF_NAME" \
+            '{event_type:"sync-folme", client_payload:{source_sha:$sha, source_ref:$ref}}')
+          gh api --method POST repos/Lantern-Product/roadmap-ama/dispatches --input - <<<"$payload"
+          # #region agent log
+          echo "dispatch_ok sha=${GITHUB_SHA:0:7}"
+          # #endregion
