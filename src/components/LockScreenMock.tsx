@@ -15,7 +15,7 @@ export default function LockScreenMock({
         <div className="text-6xl font-heading font-semibold text-neutral-900">
           9:41
         </div>
-        <div className="text-sm text-neutral-600">Wednesday, October 12</div>
+        <div className="text-sm text-neutral-600">Wednesday, October 12th</div>
       </div>
 
       <button
